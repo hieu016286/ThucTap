@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('menus', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('slug');
-            $table->unsignedInteger('parent_id')->default(0);
+            $table->integer('parent_id')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('menus');
     }
 };

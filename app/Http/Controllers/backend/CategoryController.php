@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\CategoryRequest;
 use App\Models\Category;
 use App\Component\Recursive;
 use Brian2694\Toastr\Facades\Toastr;
@@ -12,16 +13,12 @@ use Illuminate\Support\Str;
 class CategoryController extends Controller
 {
     private $category;
+    private $arr_children;
 
     public function __construct(Category $category)
     {
         $this->category = $category;
-    }
-
-    public function index()
-    {
-        $categories = $this->category->latest()->paginate(4);
-        return view('backend.category.index', compact('categories'));
+        $this->arr_children = [];
     }
 
     public function getCategory($parentId)
@@ -31,13 +28,19 @@ class CategoryController extends Controller
         return $recursive->categoryRecursive($parentId);
     }
 
+    public function index()
+    {
+        $categories = $this->category->latest()->paginate(4);
+        return view('backend.category.index', compact('categories'));
+    }
+
     public function create()
     {
         $htmlOption = $this->getCategory('');
         return view('backend.category.create', compact('htmlOption'));
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         $this->category->create([
             'name' => $request['name'],
@@ -58,6 +61,12 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $category = $this->category->find($id);
+        if(!is_null($category->children)) {
+            $this->checkChidrenRelashionship($category);
+        }
+        if(in_array($request['parent_name'], $this->arr_children) || $id === $request['parent_name']) {
+            dd(1);
+        }
         $category->update([
             'name' => $request['name'],
             'slug' => Str::slug($request['name']),
@@ -71,17 +80,18 @@ class CategoryController extends Controller
     {
         $category = $this->category->find($id);
         $category->delete();
-        $this->deleteRecursive($category);
+        $recursive = new Recursive($this->category);
+        $recursive->deleteRecursive($category);
         Toastr::success('Message', 'Delete Success');
         return redirect()->route('category.index');
     }
 
-    public function deleteRecursive($category)
+    public function checkChidrenRelashionship($data)
     {
-        if(count($category->children)) {
-            foreach ($category->children as $child) {
-                $child->delete();
-                $this->deleteRecursive($child);
+        if(count($data->children)) {
+            foreach ($data->children as $child) {
+                $this->arr_children[] = $child->id;
+                $this->checkChidrenRelashionship($child);
             }
         }
     }

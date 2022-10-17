@@ -27,4 +27,14 @@ class Recursive {
         }
         return $this->htmlSelect;
     }
+
+    public function deleteRecursive($data)
+    {
+        if(count($data->children)) {
+            foreach ($data->children as $child) {
+                $child->delete();
+                $this->deleteRecursive($child);
+            }
+        }
+    }
 }

@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->unsignedInteger('parent_id')->default(0);
-            $table->timestamps();
+        Schema::table('menus', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::table('menus', function (Blueprint $table) {
+            $table->dropColumn('deleted_at');
+        });
     }
 };

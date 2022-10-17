@@ -6,7 +6,7 @@
             <h3 class="card-title">Create</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('category.store') }}" method="post">
+            <form action="{{ route('menu.store') }}" method="post">
                 @csrf
                 <div class="form-group">
                     <label for="name">Name:</label>
@@ -17,7 +17,7 @@
                     <label for="parent_name">Parent name:</label>
                     <select class="custom-select rounded-0" name="parent_name">
                         <option value="0">--Select Parent Name--</option>
-                        {!! $htmlOption !!}
+                        {!! $optionSelect !!}
                     </select>
                     <button type="submit" class="btn btn-outline-success mt-3">Ok</button>
                 </div>

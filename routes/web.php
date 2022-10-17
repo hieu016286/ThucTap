@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backend\CategoryController;
+use App\Http\Controllers\backend\MenuController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -32,3 +33,16 @@ Route::group(['prefix' => 'category', 'as' => 'category.'], function (){
     Route::put('{id}', [CategoryController::class, 'update'])->name('update');
     Route::delete('/{id}', [CategoryController::class, 'delete'])->name('delete');
 });
+
+Route::group(['prefix' => 'menu', 'as' => 'menu.'], function (){
+    Route::get('', [MenuController::class, 'index'])->name('index');
+    Route::get('/create', [MenuController::class, 'create'])->name('create');
+    Route::post('', [MenuController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [MenuController::class, 'edit'])->name('edit');
+    Route::put('{id}', [MenuController::class, 'update'])->name('update');
+    Route::delete('/{id}', [MenuController::class, 'delete'])->name('delete');
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
