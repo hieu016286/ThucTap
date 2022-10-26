@@ -30,7 +30,7 @@ class CategoryPolicy
      */
     public function view(User $user, Category $category)
     {
-        return $user->checkPermissionAccess(config('permissions.access.list-category'));
+        return $user->checkPermissionAccess('');
 
     }
 

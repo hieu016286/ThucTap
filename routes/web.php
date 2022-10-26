@@ -29,7 +29,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['prefix' => 'category', 'as' => 'category.'], function (){
-    Route::get('', [CategoryController::class, 'index','middleware' => 'can:list-category'])->name('index');
+    Route::get('', [CategoryController::class, 'index','middleware' => 'can:category-list'])->name('index');
     Route::get('/create', [CategoryController::class, 'create','middleware' => 'can:category-create'])->name('create');
     Route::post('', [CategoryController::class, 'store'])->name('store');
     Route::get('/{id}/edit', [CategoryController::class, 'edit','middleware' => 'can:category-edit'])->name('edit');

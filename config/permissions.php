@@ -2,8 +2,8 @@
 
 return [
   'access' => [
-      'list-category' => 'list_category',
-      'list-menu' => 'list_menu'
+      'category-list' => 'category_list',
+      'menu-list' => 'menu_list'
   ],
     'table_module' => [
         'category',
