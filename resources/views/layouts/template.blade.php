@@ -26,17 +26,20 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('assets/backend/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-    @include('layouts.partials.preloader')
+@include('layouts.partials.preloader')
 
-    @include('layouts.partials.navbar')
+@include('layouts.partials.navbar')
 
-    @include('layouts.partials.sidebar')
+@include('layouts.partials.sidebar')
 
-    <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
@@ -66,9 +69,9 @@
     </div>
     <!-- /.content-wrapper -->
 
-    @include('layouts.partials.footer')
+@include('layouts.partials.footer')
 
-    <!-- Control Sidebar -->
+<!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Control sidebar content goes here -->
     </aside>
@@ -113,6 +116,78 @@
 
 <script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="/path-to-your-tinymce/tinymce.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('admin/product/index/list.js') }}"></script>
+
+<script>
+
+        $('.select2_init').select2({
+        'placeholder' : 'Chọn vai trò'
+    })
+
+    $(".tags_select_choose").select2({
+        tags: true,
+        tokenSeparators: [',']
+    })
+    $('select2_init').select2({
+        placeholder:"Chọn danh mục",
+        allowClear:true
+    })
+    let editor_config = {
+        path_absolute : "/",
+        selector: 'textarea.tinymce_editor_init',
+        relative_urls: false,
+        plugins: [
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime media nonbreaking save table directionality",
+            "emoticons template paste textpattern"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+        file_picker_callback : function(callback, value, meta) {
+            let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+            let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
+
+            var cmsURL = editor_config.path_absolute + 'laravel-filemanager?editor=' + meta.fieldname;
+            if (meta.filetype == 'image') {
+                cmsURL = cmsURL + "&type=Images";
+            } else {
+                cmsURL = cmsURL + "&type=Files";
+            }
+
+            tinyMCE.activeEditor.windowManager.openUrl({
+                url : cmsURL,
+                title : 'Filemanager',
+                width : x * 0.8,
+                height : y * 0.8,
+                resizable : "yes",
+                close_previous : "no",
+                onMessage: (api, message) => {
+                    callback(message.content);
+                }
+            });
+        }
+    };
+
+    tinymce.init(editor_config);
+
+</script>
+<script>
+    $('.checkbox_wrapper').on('click',function ()
+    {
+        $(this).parents('.card').find('.checkbox_childrent').prop('checked', $(this).prop('checked'))
+    })
+</script>
+<script>
+    $('.checkall').on('click',function ()
+    {
+        $(this).parents().find('.checkbox_childrent').prop('checked', $(this).prop('checked'))
+        $(this).parents().find('.checkbox_wrapper').prop('checked', $(this).prop('checked'))
+    })
+
+</script>
 {!! Toastr::message() !!}
 
 @stack('scripts')
