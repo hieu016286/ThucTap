@@ -24,20 +24,15 @@
                     @if($errors->has('feature_image_path'))
                         <p class="text-danger">{{$errors->first('feature_image_path')}}</p>
                     @endif
-                    <label for="name">Image:</label>
-                    <input type="file" multiple class="form-control-file rounded-0" name="image_path[]" placeholder="Image...">
-                    @if($errors->has('image_path'))
-                        <p class="text-danger">{{$errors->first('image_path')}}</p>
-                    @endif
                     <label for="parent_name">Parent name:</label>
                     <select class="custom-select rounded-0" name="category_id">
                         <option value="0">--Select Parent Name--</option>
                         {!! $htmlOption !!}
                     </select>
-                    <label for="parent_name">Tags:</label>
-                    <select class="form-control tags_select_choose" name="tags[]" multiple="multiple">
+{{--                    <label for="parent_name">Tags:</label>--}}
+{{--                    <select class="form-control tags_select_choose" name="tags[]" multiple="multiple">--}}
 
-                    </select>
+{{--                    </select>--}}
                     <label for="name">Content:</label>
                     <textarea class="form-control tinymce_editor_init" rows="3" name="contents">{{old('contents')}}</textarea>
                     @if($errors->has('contents'))

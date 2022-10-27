@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SliderRequest extends FormRequest
 {
@@ -24,7 +25,10 @@ class SliderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:sliders,name|max:255',
+            'name' => [
+                'required',
+                'max:255',
+            Rule::unique('sliders','name')->ignore($this->id)],
             'description' => 'required',
         ];
     }
@@ -32,7 +36,8 @@ class SliderRequest extends FormRequest
     {
         return [
             'name' => 'name',
-            'description' => 'description'
+            'description' => 'description',
+            'image_path' => 'image_path'
         ];
     }
     public function messages()

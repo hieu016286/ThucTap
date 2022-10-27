@@ -55,61 +55,38 @@ class ProductController extends Controller
     }
     public function store(ProductRequest $request)
     {
-        try{
+        try {
+            if ($request->has('feature_image_path')) {
+                $request->file('feature_image_path')->move(public_path('/products/'), $request->file('feature_image_path')->getClientOriginalName());
+                $request->feature_image_path = $request->file('feature_image_path')->getClientOriginalName();
+            }
             DB::beginTransaction();
-            $dataProductCreate = [
+            $product = [
                 'name' => $request->name,
                 'price' => $request->price,
                 'content' => $request->contents,
                 'user_id' => auth()->id(),
                 'category_id' => $request->category_id,
-            ];
-            $dataUploadFeatureImage = $this->storageTraitUpload($request,'feature_image_path','product');
-            if(!empty($dataUploadFeatureImage))
-            {
-                $dataProductCreate['feature_image_name'] = $dataUploadFeatureImage['file_name'];
-                $dataProductCreate['feature_image_path'] = $dataUploadFeatureImage['file_path'];
-            }
-            $product = $this->product->create($dataProductCreate);
-            if($request->hasFile('image_path'))
-            {
-                foreach ($request->image_path as $fileItem)
-                {
-                    $dataProductImageDetail = $this->storageTraitUploadMutiple($fileItem,'product');
-                    $product->images()->create([
-                        'image_path' => $dataProductImageDetail['file_path'],
-                        'image_name' => $dataProductImageDetail['file_name'],
-                    ]);
-
-                }
-            }
-            $tagIds = [];
-            if(!empty($request->tags))
-            {
-                foreach ($request->tags as $tagItem)
-                {
-                    $tagInstance = $this->tag->firstOrCreate(['name' => $tagItem]);
-                    $tagIds[] = $tagInstance->id;
-                }
-            }
-            $product->tags()->attach($tagIds);
+                'feature_image_path' => $request->feature_image_path,
+            ];//            $tagIds = [];
+//            if(!empty($request->tags))
+//            {
+//                foreach ($request->tags as $tagItem)
+//                {
+//                    $tagInstance = $this->tag->firstOrCreate(['name' => $tagItem]);
+//                    $tagIds[] = $tagInstance->id;
+//                }
+//            }
+//            $product->tags()->attach($tagIds);
+            $this->product->create($product);
             DB::commit();
             return redirect()->route('product.index');
-        }
-        catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             DB::rollBack();
-            Log::error('message: ' .$exception->getMessage() . 'line :' .$exception->getLine());
+            Log::error('message: ' . $exception->getMessage() . 'line :' . $exception->getLine());
         }
-
-//        $file = $request->feature_image_path;
-//        $fileName = $request->feature_image_path->getClientOriginalName();
-//        $path = $request->file('feature_image_path')->storeAs('public/product',$fileName);
-//        $data = [
-//            'file_name' => $fileName,
-//            'file_path' => Storage::url($path)
-//        ];
     }
+
     public function edit($id)
     {
         $product = $this->product->find($id);
@@ -119,6 +96,10 @@ class ProductController extends Controller
     public function update(Request $request,$id)
     {
         try{
+            if ($request->hasFile('feature_image_path')) {
+                $request->file('feature_image_path')->move(public_path('/products/'), $request->file('feature_image_path')->getClientOriginalName());
+                $request->feature_image_path = $request->file('feature_image_path')->getClientOriginalName();
+            }
             DB::beginTransaction();
             $dataProductUpdate = [
                 'name' => $request->name,
@@ -126,40 +107,11 @@ class ProductController extends Controller
                 'content' => $request->contents,
                 'user_id' => auth()->id(),
                 'category_id' => $request->category_id,
+                'feature_image_path' => $request->feature_image_path,
+
             ];
-            $dataUploadFeatureImage = $this->storageTraitUpload($request,'feature_image_path','product');
-            if(!empty($dataUploadFeatureImage))
-            {
-                $dataProductUpdate['feature_image_name'] = $dataUploadFeatureImage['file_name'];
-                $dataProductUpdate['feature_image_path'] = $dataUploadFeatureImage['file_path'];
-            }
-
             $product = $this->product->find($id);
-            if($request->hasFile('image_path'))
-            {
-                $this->productImage->where('product_id',$id)->delete();
-                foreach ($request->image_path as $fileItem)
-                {
-                    $dataProductImageDetail = $this->storageTraitUploadMutiple($fileItem,'product');
-                    $product->images()->update([
-                        'image_path' => $dataProductImageDetail['file_path'],
-                        'image_name' => $dataProductImageDetail['file_name'],
-                    ]);
-
-                }
-            }
-            $tagIds = [];
-
-            if(!empty($request->tags))
-            {
-                $this->productImage->where('product_id',$id)->delete();
-                foreach ($request->tags as $tagItem)
-                {
-                    $tagInstance = $this->tag->firstOrCreate(['name' => $tagItem]);
-                    $tagIds[] = $tagInstance->id;
-                }
-            }
-            $product->tags()->sync($tagIds);
+            $this->product->find($id)->update($dataProductUpdate);
             DB::commit();
             return redirect()->route('product.index');
         }

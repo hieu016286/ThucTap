@@ -3,10 +3,10 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Create</h3>
+            <h3 class="card-title">Edit</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('slider.update',['id'=>$slider->id]) }}" method="post">
+            <form action="{{ route('slider.update',['id'=>$slider->id]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <div class="form-group">
@@ -22,7 +22,10 @@
                     @endif
                     <label>Image:</label>
                     <input type="file" class="form-control file" name="image_path">
-                    <img src="{{$slider->image_path}}">
+                    <input type="hidden" name="image_path" value="{{$slider->image_path}}">
+
+                    <img src="/sliders/{{$slider->image_path}}" height="100px" width="100px">
+                    <br>
                     <button type="submit" class="btn btn-outline-success mt-3">Ok</button>
                 </div>
             </form>

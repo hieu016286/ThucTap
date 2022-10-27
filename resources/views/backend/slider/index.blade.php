@@ -27,8 +27,8 @@
                 @foreach($sliders as $slider)
                     <td>{{$slider->id}}</td>
                     <td>{{$slider->name}}</td>
-                    <td>{{$slider->descripton}}</td>
-                    <td><img src="{{$slider->image_name}}" height="60px"  width="60px" alt=""></td>
+                    <td>{{$slider->description}}</td>
+                    <td><img src="./sliders/{{$slider->image_path}}" height="60px"  width="60px" alt=""></td>
                     <td>
                         <span class="badge bg-warning" style="cursor: pointer">
                             <a href="{{route('slider.edit',['id' => $slider->id])}}">Edit</a>

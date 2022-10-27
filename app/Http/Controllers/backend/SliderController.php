@@ -8,6 +8,7 @@ use App\Models\Slider;
 use App\Traits\StorageImageTrait;
 use Brian2694\Toastr\Facades\Toastr;
 use http\Client\Request;
+use Symfony\Component\Console\Input\Input;
 use function view;
 
 class SliderController extends Controller
@@ -30,16 +31,23 @@ class SliderController extends Controller
     }
     public function store(SliderRequest $request)
     {
+//        if($request->has('image_path')) {
+//            $file = $request->image_path;
+//            $ext = $request->image_path->extension();
+//            $file_name = time().'-'.'image_path.'.$ext;
+//            $file->move(public_path('sliders'),$file_name);
+//        }
+//        $request->merge(['image_path'=>$file_name]);
+        if($request->has('image_path'))
+        {
+            $request->file('image_path')->move(public_path('/sliders/'), $request->file('image_path')->getClientOriginalName());
+            $request->image_path = $request->file('image_path')->getClientOriginalName();
+        }
         $dataInsert = [
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'image_path' => $request->image_path
         ];
-        $dataImageSlider = $this->storageTraitUpload($request,'image_path','slider');
-        if(!empty($dataImageSlider))
-        {
-            $dataInsert['image_name'] = $dataImageSlider['file_name'];
-            $dataInsert['image_path'] = $dataImageSlider['file_path'];
-        }
         $this->slider->create($dataInsert);
         return redirect()->route('slider.index');
     }
@@ -50,17 +58,17 @@ class SliderController extends Controller
     }
     public function update(SliderRequest $request, $id)
     {
+        if($request->hasFile('image_path'))
+        {
+            $request->file('image_path')->move(public_path('/sliders/'), $request->file('image_path')->getClientOriginalName());
+            $request->image_path = $request->file('image_path')->getClientOriginalName();
+        }
         $dataUpdate = [
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'image_path' => $request->image_path
         ];
-        $dataImageSlider = $this->storageTraitUpload($request,'image_path','slider');
-        if(!empty($dataImageSlider))
-        {
-            $dataUpdate['image_name'] = $dataImageSlider['file_name'];
-            $dataUpdate['image_path'] = $dataImageSlider['file_path'];
-        }
-        $this->slider->update($dataUpdate);
+        $this->slider->find($id)->update($dataUpdate);
         return redirect()->route('slider.index');
     }
     public function delete($id)

@@ -336,7 +336,7 @@
                     </div>
                     @endforeach
 
-                    {{$products->links}}
+
                 </div><!--features_items-->
             </div>
         </div>

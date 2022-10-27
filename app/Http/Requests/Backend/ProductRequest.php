@@ -30,7 +30,17 @@ class ProductRequest extends FormRequest
             'max:255',Rule::unique('products','name')->ignore($this->id)],
             'price' => 'required',
             'category_id' => 'required',
-            'content' => 'required'
+            'contents' => 'required',
+        ];
+    }
+    public function attributes()
+    {
+        return [
+            'name' => 'name',
+            'price' => 'price',
+            'feature_image_path' => 'feature_image_path',
+            'content' => 'contents',
+            'category_id' => 'category_id'
         ];
     }
     public function messages()
@@ -41,7 +51,7 @@ class ProductRequest extends FormRequest
             'name.max' => 'Tên không được quá 255 kí tự',
             'category_id.required' => 'Danh mục không được để trống',
             'price.required' => 'Giá tiền không được để trống',
-            'contents.required' => 'Nội dung không được để trống',
+            'content.required' => 'Nội dung không được để trống',
         ];
     }
 }

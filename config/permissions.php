@@ -4,6 +4,7 @@ return [
   'access' => [
       'category-list' => 'category_list',
       'menu-list' => 'menu_list'
+
   ],
     'table_module' => [
         'category',

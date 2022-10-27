@@ -3,7 +3,7 @@
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Create</h3>
+            <h3 class="card-title">Edit</h3>
         </div>
         <div class="card-body">
             <form action="{{ route('product.update',$product->id) }}" method="post" enctype="multipart/form-data">
@@ -25,15 +25,11 @@
                     @if($errors->has('feature_image_path'))
                         <p class="text-danger">{{$errors->first('feature_image_path')}}</p>
                     @endif
-                    <img src="{{$product->feature_image_name}}" width="100px" height="100px">
+                    <img src="/products/{{$product->feature_image_path}}" width="100px" height="100px">
                     <br>
-                    <label for="name">Image:</label>
-                    <input type="file" multiple class="form-control-file rounded-0 pb-2" name="image_path[]" placeholder="Image...">
-                    @if($errors->has('image_path'))
-                        <p class="text-danger">{{$errors->first('image_path')}}</p>
-                    @endif
+                    <input type="hidden" name="feature_image_path" value="{{$product->feature_image_path}}">
                     @foreach($product->productImages as $productImage)
-                        <img src="{{$productImage->image_path}}" width="100px" height="100px">
+                        <img src="/products/{{$productImage->image_path}}" width="100px" height="100px">
                     @endforeach
                     <br>
                     <label for="parent_name">Parent name:</label>
@@ -41,13 +37,13 @@
                         <option value="0">--Select Parent Name--</option>
                         {!! $htmlOption !!}
                     </select>
-                    <label for="parent_name">Tags:</label>
-                    <select class="form-control tags_select_choose" name="tags[]" multiple="multiple">
-                        @foreach($product->tags as $tag)
-                            <option value="{{$tag->id}}" selected>{{$tag->name}}</option>
-                        @endforeach
+{{--                    <label for="parent_name">Tags:</label>--}}
+{{--                    <select class="form-control tags_select_choose" name="tags[]" multiple="multiple">--}}
+{{--                        @foreach($product->tags as $tag)--}}
+{{--                            <option value="{{$tag->id}}" selected>{{$tag->name}}</option>--}}
+{{--                        @endforeach--}}
 
-                    </select>
+{{--                    </select>--}}
                     <label for="name">Content:</label>
                     <textarea class="form-control tinymce_editor_init" rows="3" name="contents">{{$product->content}}</textarea>
                     @if($errors->has('contents'))

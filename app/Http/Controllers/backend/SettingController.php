@@ -29,7 +29,7 @@ class SettingController extends Controller
         $this->setting->create([
             'config_key' => $request->config_key,
             'config_value' => $request->config_value,
-            'type' => $request->type
+            'type' => $request->type ?? 'text'
         ]);
         return redirect()->route('settings.index');
     }

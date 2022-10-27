@@ -18,7 +18,6 @@ class Product extends Model
         'content',
         'user_id',
         'category_id',
-        'feature_image_name',
     ];
     public function images()
     {

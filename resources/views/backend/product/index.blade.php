@@ -29,7 +29,7 @@
                     <td>{{$product->id}}</td>
                     <td>{{$product->name}}</td>
                     <td>{{number_format($product->price)}}</td>
-                    <td><img src="{{$product->feature_image_name}}" height="60px"  width="60px" alt=""></td>
+                    <td><img src="/products/{{$product->feature_image_path}}" height="60px"  width="60px" alt=""></td>
                     <td>{{$product->category->name ?? null}}</td>
 
                     <td>

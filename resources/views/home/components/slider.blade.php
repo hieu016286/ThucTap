@@ -20,8 +20,7 @@
                                 <button type="button" class="btn btn-default get">Get it now</button>
                             </div>
                             <div class="col-sm-6">
-                                <img src="{{$slider->image_path }}" class="girl img-responsive" alt="" />
-                                <img src="images/home/pricing.png"  class="pricing" alt="" />
+                                <img src="/sliders/{{$slider->image_path }}" class="girl img-responsive" alt="" height="450px"/>
                             </div>
                         </div>
 

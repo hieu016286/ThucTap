@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = $this->user->paginate('10');
+        $users = $this->user->whereNot('email','superadmin@gmail.com')->paginate('10');
         return view('backend.user.index',compact('users'));
     }
     public function create()

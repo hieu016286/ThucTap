@@ -6,7 +6,7 @@
             <h3 class="card-title">Create</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('slider.store') }}" method="post">
+            <form action="{{ route('slider.store') }}" method="Post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="name">Name:</label>
@@ -20,7 +20,7 @@
                         <p class="text-danger">{{$errors->first('description')}}</p>
                     @endif
                     <label>Image:</label>
-                    <input type="file" class="form-control file" name="image_path">
+                    <input type="file" class="form-control" name="image_path">
                     <button type="submit" class="btn btn-outline-success mt-3">Ok</button>
                 </div>
             </form>
