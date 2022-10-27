@@ -11,7 +11,7 @@
                     <div class="product-image-wrapper">
                         <div class="single-products">
                             <div class="productinfo text-center">
-                                <img src="{{$productsRecommendItem->image_name}}" alt="" />
+                                <img src="/products/{{$productsRecommendItem->feature_image_path}}" alt="" />
                                 <h2>{{number_format($productsRecommendItem->price)}}</h2>
                                 <p>{{$productsRecommendItem->name}}</p>
                                 <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
